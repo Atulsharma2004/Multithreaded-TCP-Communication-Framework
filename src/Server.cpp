@@ -13,16 +13,19 @@
 Server::Server(int port, int threads)
     : port(port), running(true), pool(threads) {}
 
-Server::~Server() {
+Server::~Server()
+{
     stop();
 }
 
-void Server::setNonBlocking(int fd) {
+void Server::setNonBlocking(int fd)
+{
     int flags = fcntl(fd, F_GETFL, 0);
     fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 }
 
-void Server::setupSocket() {
+void Server::setupSocket()
+{
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     int opt = 1;
@@ -33,7 +36,7 @@ void Server::setupSocket() {
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
 
-    bind(server_fd, (struct sockaddr*)&address, sizeof(address));
+    bind(server_fd, (struct sockaddr *)&address, sizeof(address));
     listen(server_fd, SOMAXCONN);
 
     setNonBlocking(server_fd);
@@ -49,11 +52,14 @@ void Server::setupSocket() {
     std::cout << "Server started on port " << port << std::endl;
 }
 
-void Server::acceptClients() {
-    while (true) {
+void Server::acceptClients()
+{
+    while (true)
+    {
         int client_fd = accept(server_fd, nullptr, nullptr);
 
-        if (client_fd == -1) {
+        if (client_fd == -1)
+        {
             if (errno == EAGAIN || errno == EWOULDBLOCK)
                 break;
             else
@@ -73,25 +79,40 @@ void Server::acceptClients() {
     }
 }
 
-void Server::handleClient(int client_fd) {
+void Server::handleClient(int client_fd)
+{
     char buffer[BUFFER_SIZE];
 
-    while (true) {
+    while (true)
+    {
         int bytes = read(client_fd, buffer, sizeof(buffer));
 
-        if (bytes > 0) {
-            write(client_fd, buffer, bytes);
+        // if (bytes > 0) {
+        //     write(client_fd, buffer, bytes);
+        // }
+        if (bytes > 0)
+        {
+            std::string msg(buffer, bytes);
+
+            std::cout << "Client[" << client_fd << "]: "
+                      << msg << std::endl;
+
+            write(client_fd, buffer, bytes); // echo back
         }
-        else if (bytes == 0) {
+
+        else if (bytes == 0)
+        {
             std::cout << "Client disconnected: " << client_fd << std::endl;
             close(client_fd);
             client_fds.erase(client_fd);
             break;
         }
-        else {
+        else
+        {
             if (errno == EAGAIN || errno == EWOULDBLOCK)
                 break;
-            else {
+            else
+            {
                 perror("read");
                 close(client_fd);
                 client_fds.erase(client_fd);
@@ -101,33 +122,40 @@ void Server::handleClient(int client_fd) {
     }
 }
 
-void Server::start() {
+void Server::start()
+{
     setupSocket();
 
     epoll_event events[MAX_EVENTS];
 
-    while (running) {
+    while (running)
+    {
         int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
 
-        for (int i = 0; i < nfds; ++i) {
+        for (int i = 0; i < nfds; ++i)
+        {
 
-            if (events[i].data.fd == server_fd) {
+            if (events[i].data.fd == server_fd)
+            {
                 acceptClients();
-            } else {
+            }
+            else
+            {
                 int client_fd = events[i].data.fd;
 
-                pool.enqueue([this, client_fd]() {
-                    handleClient(client_fd);
-                });
+                pool.enqueue([this, client_fd]()
+                             { handleClient(client_fd); });
             }
         }
     }
 }
 
-void Server::stop() {
+void Server::stop()
+{
     running = false;
 
-    for (int fd : client_fds) {
+    for (int fd : client_fds)
+    {
         close(fd);
     }
 
