@@ -75,52 +75,52 @@ sudo apt install cmake
 ```
 
 
-## Build Instructions
+# Build Instructions
 
-# Step 1: Create build directory
+## Step 1: Create build directory
 ```bash
 mkdir build
 cd build
 ```
 
-# Step 2: Generate build files
+## Step 2: Generate build files
 ```bash
 cmake ..
 ```
 
-# Step 3: Compile
+## Step 3: Compile
 ```bash
 make
 ```
 
-# Output:
+## Output:
 build/server
 build/client
 
-## ▶️ Running the Application
+# ▶️ Running the Application
 
-# Terminal 1 – Start Server
+## Terminal 1 – Start Server
 ```bash
 ./server
 ```
 
 
-# Expected output:
+## Expected output:
 
 Server started on port 8080
 
-# Terminal 2 – Run Client
+## Terminal 2 – Run Client
 ```bash
 ./client
 ```
 
 
-# Expected output:
+## Expected output:
 
 Server reply: Hello from client
 
-## 🧠 Technical Design
-# epoll
+# 🧠 Technical Design
+## epoll
 
 1. Efficient O(1) event notification
 
@@ -128,7 +128,7 @@ Server reply: Hello from client
 
 3. Better than select() and poll()
 
-# Thread Pool
+## Thread Pool
 
 1. Avoids overhead of creating threads per client
 
@@ -136,7 +136,7 @@ Server reply: Hello from client
 
 3. Tasks processed from queue
 
-# Synchronization
+## Synchronization
 
 1. std::mutex
 
@@ -144,18 +144,18 @@ Server reply: Hello from client
 
 3. std::atomic<bool>
 
-## 🐞 Debugging with GDB
+# 🐞 Debugging with GDB
 
 Compile in debug mode (already enabled in CMake).
 
-# Start gdb:
+## Start gdb:
 
 ```bash
 gdb ./server
 ```
 
 
-# Common commands:
+## Common commands:
 
 ```bash
 break main
@@ -169,7 +169,7 @@ continue
 quit
 ```
 
-# Debugging Multithreading
+## Debugging Multithreading
 
 ```bash
 info threads
@@ -177,35 +177,35 @@ thread 2
 bt
 ```
 
-## 🔍 Memory Analysis with Valgrind
+# 🔍 Memory Analysis with Valgrind
 
-# Memory Leak Detection
+## Memory Leak Detection
 ```bash
 valgrind --leak-check=full ./server
 ```
 
 
-# Look for:
+## Look for:
 
 ```bash
 definitely lost
 indirectly lost
 ```
 
-# Detect Race Conditions
+## Detect Race Conditions
 
 ```bash
 valgrind --tool=helgrind ./server
 ```
 
-# Performance Profiling
+## Performance Profiling
 
 ```bash
 valgrind --tool=callgrind ./server
 callgrind_annotate callgrind.out.*
 ```
 
-## 📈 Performance Characteristics
+# 📈 Performance Characteristics
 
 1. O(1) epoll event detection
 
