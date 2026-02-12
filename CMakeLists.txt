@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(TCP_Framework VERSION 1.0)
+project(TCP_Framework VERSION 1.5)
 
 # Use C++17
 set(CMAKE_CXX_STANDARD 17)

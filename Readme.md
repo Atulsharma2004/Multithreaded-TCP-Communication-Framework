@@ -1,5 +1,7 @@
 # Multithreaded TCP Communication Framework (C++17, Linux)
 
+## --version 1.0--
+
 A high-performance multithreaded TCP client-server framework built using:
 
 - C++17
@@ -214,3 +216,50 @@ callgrind_annotate callgrind.out.*
 3. Minimal thread creation overhead
 
 4. Suitable for high-connection environments
+
+
+## --version 1.5--
+
+# 🔥 What Changes I've made
+
+## 1️⃣ Non-blocking sockets
+
+### Using:
+
+```bash
+fcntl(fd, F_SETFL, O_NONBLOCK);
+```
+
+## 2️⃣ Edge-triggered epoll
+
+### Using:
+
+```bash
+event.events = EPOLLIN | EPOLLET;
+```
+
+## 3️⃣ Proper Read Loop
+
+In edge-triggered mode you MUST:
+
+read until EAGAIN
+
+Otherwise you lose events.
+
+## 4️⃣ Graceful Shutdown
+
+1. Catch SIGINT
+
+2. Stop epoll loop
+
+3. Close all fds
+
+4. Join threads
+
+# ✅ What Changed Technically
+Feature	    |       Before	        |       Now
+Blocking sockets	Yes	            ❌ No
+epoll mode	        Level-triggered	✅ Edge-triggered
+Read handling	    Single read	    ✅ Read loop until EAGAIN
+Shutdown	        Force kill	    ✅ SIGINT graceful
+Resource cleanup	Partial	        ✅ Full
