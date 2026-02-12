@@ -1,0 +1,85 @@
+# ===============================
+# Build directories
+# ===============================
+build/
+cmake-build-*/
+out/
+
+# ===============================
+# CMake generated files
+# ===============================
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+compile_commands.json
+
+# ===============================
+# Binaries
+# ===============================
+server
+client
+*.exe
+*.out
+*.app
+
+# ===============================
+# Object files
+# ===============================
+*.o
+*.obj
+*.lo
+*.a
+*.so
+*.so.*
+*.dll
+*.dylib
+
+# ===============================
+# Debug / Core dumps
+# ===============================
+*.core
+core.*
+vgcore.*
+callgrind.out.*
+valgrind.log
+
+# ===============================
+# Logs
+# ===============================
+*.log
+
+# ===============================
+# IDE files
+# ===============================
+
+# VS Code
+.vscode/
+
+# CLion / JetBrains
+.idea/
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+
+# ===============================
+# OS files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# Coverage files
+# ===============================
+*.gcno
+*.gcda
+*.gcov
+
+# ===============================
+# Temporary files
+# ===============================
+*~
